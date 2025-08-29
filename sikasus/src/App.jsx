@@ -225,20 +225,16 @@ function App() {
                 <div className="text-gray-900">{selectedEmployee.unit}</div>
               </div>
               <div className="bg-white border border-[#00529C] p-4 rounded-lg">
-                <div className="text-[#00529C] text-sm mb-1">Lokasi</div>
-                <div className="text-gray-900">{selectedEmployee.lokasi}</div>
+                <div className="text-[#00529C] text-sm mb-1">JG</div>
+                <div className="text-gray-900">{selectedEmployee.jg}</div>
               </div>
               <div className="bg-white border border-[#00529C] p-4 rounded-lg">
-                <div className="text-[#00529C] text-sm mb-1">Status</div>
-                <div className="text-gray-900">{selectedEmployee.status}</div>
+                <div className="text-[#00529C] text-sm mb-1">Branch Office</div>
+                <div className="text-gray-900">{selectedEmployee.branch_office}</div>
               </div>
               <div className="bg-white border border-[#00529C] p-4 rounded-lg">
-                <div className="text-[#00529C] text-sm mb-1">Divisi</div>
-                <div className="text-gray-900">{selectedEmployee.divisi}</div>
-              </div>
-              <div className="bg-white border border-[#00529C] p-4 rounded-lg">
-                <div className="text-[#00529C] text-sm mb-1">Departemen</div>
-                <div className="text-gray-900">{selectedEmployee.departemen}</div>
+                <div className="text-[#00529C] text-sm mb-1">Tahun Penjatuhan Hukdis</div>
+                <div className="text-gray-900">{selectedEmployee.tahun_hukdis}</div>
               </div>
             </div>
 
