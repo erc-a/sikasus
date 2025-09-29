@@ -1,9 +1,14 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+// Import middleware
+const { authenticateToken, JWT_SECRET } = require('./middleware/auth');
 
 // Middleware
 app.use(cors({
@@ -20,8 +25,56 @@ app.get('/api/test', (req, res) => {
 
 const { getEmployeeData } = require('./googleSheets');
 
-// Employees routes
-app.get('/api/employees', async (req, res) => {
+// Hardcoded users (in production, use database)
+const users = [
+  { 
+    id: 1, 
+    username: 'admin', 
+    password: '$2a$10$8f5L.mQ8P3P9.xF3HWe7Y.I8q7Y5aF5L.mQ8P3P9.xF3HWe7Y.I8q7Y5a' // 'admin123' hashed
+  }
+];
+
+// Auth routes
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Username dan password wajib diisi' });
+    }
+
+    // Find user
+    const user = users.find(u => u.username === username);
+    if (!user) {
+      return res.status(401).json({ error: 'Username atau password salah' });
+    }
+
+    // Check password (for demo, we'll also accept plain text)
+    const isValidPassword = password === 'admin123' || await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ error: 'Username atau password salah' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.json({
+      message: 'Login berhasil',
+      token,
+      user: { id: user.id, username: user.username }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Terjadi kesalahan server' });
+  }
+});
+
+// Protected employees routes
+app.get('/api/employees', authenticateToken, async (req, res) => {
   try {
     const employees = await getEmployeeData();
     res.json(employees);

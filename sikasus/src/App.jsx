@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { employeeService } from './services/api';
-import { auth } from './utils/auth';
+import { employeeService, authService } from './services/api';
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -13,7 +12,7 @@ function App() {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
+  const [isLoggedIn, setIsLoggedIn] = useState(authService.isAuthenticated());
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -37,14 +36,17 @@ function App() {
     }
   };
 
-  const handleLogin = (username, password) => {
-    if (auth.login(username, password)) {
+  const handleLogin = async (username, password) => {
+    try {
+      await authService.login(username, password);
       setIsLoggedIn(true);
+    } catch (error) {
+      alert('Login gagal: ' + error.message);
     }
   };
 
   const handleLogout = () => {
-    auth.logout();
+    authService.logout();
     setIsLoggedIn(false);
     setSelectedEmployee(null);
     setSearchQuery('');
@@ -82,15 +84,15 @@ function App() {
           {/* Header section */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-[#00529C] mb-2">Selamat Datang</h1>
-            <h2 className="text-xl font-semibold text-[#00529C] mb-4">Sistem Informasi Satu</h2>
+            <h2 className="text-xl font-semibold text-[#00529C] mb-4">Sistem Informasi Kasus Pekerja</h2>
             <p className="text-[#00529C]/70 text-sm">
               Platform modern untuk informasi pekerja dan kasus
             </p>
           </div>
 
-          <form onSubmit={(e) => {
+          <form onSubmit={async (e) => {
             e.preventDefault();
-            handleLogin(e.target.username.value, e.target.password.value);
+            await handleLogin(e.target.username.value, e.target.password.value);
           }}
           className="space-y-6"
           >
@@ -137,7 +139,7 @@ function App() {
           {/* Footer text */}
           <div className="mt-6 text-center">
             <p className="text-[#00529C]/60 text-sm">
-              © 2025 Sistem Informasi Satu. All rights reserved.
+              © 2025 Sistem Informasi Kasus Pekerja. All rights reserved.
             </p>
           </div>
         </div>
@@ -147,10 +149,10 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#EBF5FF] flex flex-col">
-      <Header className="sticky top-0 z-50 border-b border-[#00529C] shadow-md py-4" onLogout={handleLogout} userName="Eric Arwido Damanik" />
+  <Header className="sticky top-0 z-50 border-b border-[#00529C] shadow-md py-4" onLogout={handleLogout} />
       <main className="container mx-auto px-4 py-8 flex-grow">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-[#00529C] mb-2">Sistem Informasi Satu</h1>
+          <h1 className="text-4xl font-bold text-[#00529C] mb-2">Sistem Informasi Kasus Pekerja</h1>
           <p className="text-[#00529C]/70">Platform modern untuk informasi pekerja dan kasus</p>
           
           <div className="mt-8 max-w-md mx-auto">

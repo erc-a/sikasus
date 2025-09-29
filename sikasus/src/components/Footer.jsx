@@ -5,7 +5,7 @@ const Footer = ({ className = '' }) => {
     <footer className={`bg-[#00529C] ${className}`}>
       <div className="container mx-auto px-4">
         <p className="text-white text-sm text-center">
-          © 2025 Sistem Informasi Satu. All rights reserved.
+          © 2025 Sistem Informasi Kasus Pekerja. All rights reserved.
         </p>
       </div>
     </footer>

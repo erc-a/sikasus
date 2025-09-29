@@ -1,6 +1,6 @@
-# Sistem Informasi Satu (SIKASUS)
+# Sistem Informasi Kasus Pekerja (SIKASUS)
 
-Sistem Informasi Satu (SIKASUS) adalah platform modern untuk mengelola informasi pekerja dan kasus di Perusahaan. Aplikasi ini menyediakan antarmuka yang intuitif untuk mencari, menampilkan, dan mengelola data pekerja serta kasus-kasus terkait.
+Sistem Informasi Kasus Pekerja (SIKASUS) adalah platform modern untuk mengelola informasi pekerja dan kasus di Perusahaan. Aplikasi ini menyediakan antarmuka yang intuitif untuk mencari, menampilkan, dan mengelola data pekerja serta kasus-kasus terkait.
 
 ## Fitur Utama
 
@@ -146,4 +146,4 @@ Untuk berkontribusi pada proyek ini:
 
 ## Lisensi
 
-Hak Cipta © 2025 Sistem Informasi Satu. Seluruh hak cipta dilindungi undang-undang.
+Hak Cipta © 2025 Sistem Informasi Kasus Pekerja. Seluruh hak cipta dilindungi undang-undang.

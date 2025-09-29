@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Header = ({ className = '', onLogout, userName }) => {
+const Header = ({ className = '', onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -9,7 +9,7 @@ const Header = ({ className = '', onLogout, userName }) => {
         {/* Logo */}
         <div className="lg:w-1/4">
           <span className="text-2xl font-extrabold tracking-tight text-white">
-            Sistem Informasi Satu
+            Sistem Informasi Kasus Pekerja
           </span>
         </div>
 
@@ -46,7 +46,7 @@ const Header = ({ className = '', onLogout, userName }) => {
         {/* Right Side: User & Logout */}
         <div className="hidden md:flex lg:w-1/4 items-center justify-end space-x-4">
           <span className="font-medium text-white">
-            Hai, <span className="font-semibold">{userName}</span>
+            Selamat Datang
           </span>
           <button 
             onClick={onLogout}
@@ -65,7 +65,7 @@ const Header = ({ className = '', onLogout, userName }) => {
           </a>
           <div className="flex items-center justify-between pt-2 border-t border-[#00529C]">
             <span className="font-medium text-[#00529C]">
-              Hai, <span className="font-semibold">{userName}</span>
+              Selamat Datang
             </span>
             <button 
               onClick={onLogout}
