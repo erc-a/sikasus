@@ -53,20 +53,23 @@ function App() {
     setSuggestions([]);
   };
 
-  const handleSearchInput = (e) => {
+    const handleSearchInput = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
     
-    if (value.length > 0) {
+    if (value) {
       const filtered = employees.filter(emp => 
         emp.pn?.toLowerCase().includes(value.toLowerCase()) ||
-        emp.nama?.toLowerCase().includes(value.toLowerCase())
+        emp.nama?.toLowerCase().includes(value.toLowerCase()) ||
+        emp.tahun_hukdis?.toLowerCase().includes(value.toLowerCase()) ||
+        emp.daftar_kasus?.some(kasusDetail => 
+          kasusDetail.kasus.toLowerCase().includes(value.toLowerCase()) ||
+          kasusDetail.tahun.toLowerCase().includes(value.toLowerCase())
+        )
       );
-      setSuggestions(filtered);
-      setShowSuggestions(true);
+      setSuggestions(filtered.slice(0, 5));
     } else {
       setSuggestions([]);
-      setShowSuggestions(false);
     }
   };
 
@@ -159,7 +162,7 @@ function App() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Masukkan PN/Nama Pekerja"
+                placeholder="Masukkan PN/Nama/Tahun/Kasus untuk mencari"
                 value={searchQuery}
                 onChange={handleSearchInput}
                 onFocus={() => setShowSuggestions(true)}
@@ -169,7 +172,12 @@ function App() {
                 onClick={() => {
                   const found = employees.find(emp => 
                     emp.pn?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    emp.nama?.toLowerCase().includes(searchQuery.toLowerCase())
+                    emp.nama?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    emp.tahun_hukdis?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    emp.daftar_kasus?.some(kasusDetail => 
+                      kasusDetail.kasus.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      kasusDetail.tahun.toLowerCase().includes(searchQuery.toLowerCase())
+                    )
                   );
                   setSelectedEmployee(found || null);
                   setShowSuggestions(false);
@@ -243,35 +251,29 @@ function App() {
             <h2 className="text-2xl font-bold text-[#00529C] mb-4">Daftar Kasus</h2>
             <div className="bg-white border border-[#00529C] p-4 rounded-lg">
               {(() => {
-                // Pastikan kasus selalu dalam bentuk array
-                let kasusList = Array.isArray(selectedEmployee.kasus) ? 
-                  selectedEmployee.kasus : 
-                  (selectedEmployee.kasus ? [selectedEmployee.kasus] : []);
+                // Gunakan daftar_kasus yang memiliki detail kasus + tahun spesifik
+                let kasusList = selectedEmployee.daftar_kasus || [];
                 
-                // Filter out empty kasus
-                kasusList = kasusList.filter(kasus => kasus && kasus.trim());
-
                 if (kasusList.length === 0) {
-                  return <p className="text-[#00529C]">Tidak ada kasus</p>;
+                  return (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                      <div className="text-gray-500">Tidak ada kasus</div>
+                    </div>
+                  );
                 }
 
                 return (
-                  <div className="space-y-4">
-                    {kasusList.map((kasus, index) => (
-                      <div 
-                        key={index} 
-                        className={`${
-                          index !== kasusList.length - 1 ? 'border-b border-[#00529C]/20 pb-4 mb-4' : ''
-                        }`}
-                      >
-                        <div className="flex items-start">
-                          <div className="flex-shrink-0 bg-[#FF6B00] text-white rounded-full w-6 h-6 flex items-center justify-center mr-3">
+                  <div className="space-y-3">
+                    {kasusList.map((kasusDetail, index) => (
+                      <div key={index} className="border border-orange-200 rounded-lg p-3 bg-orange-50">
+                        <div className="flex items-start space-x-2">
+                          <span className="flex-shrink-0 w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
                             {index + 1}
-                          </div>
-                          <div className="flex-grow">
-                            <p className="text-gray-900 whitespace-pre-line">
-                              {typeof kasus === 'string' ? kasus : kasus.deskripsi || kasus}
-                            </p>
+                          </span>
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">
+                              {kasusDetail.kasus} (Tahun: {kasusDetail.tahun})
+                            </div>
                           </div>
                         </div>
                       </div>
